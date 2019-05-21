@@ -33,7 +33,7 @@ namespace CarAI
             Evolution = new Evolution<CarGenotype>(100, weights)
             {
                 Elits = 10,
-                ElitRequirementTop = 0.05f
+                ElitRequirementTop = 0.15f
             };
 
             UpdateCarEntities();

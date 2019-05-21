@@ -34,7 +34,7 @@ namespace CarAI.AutoMotive
 
         public double GetFitness()
         {
-            return CheckpointsPassed;
+            return CheckpointsPassed + Checkpoint*2;
         }
 
         public IGenotype Mutation(float mutationProb, float mutationAmount)

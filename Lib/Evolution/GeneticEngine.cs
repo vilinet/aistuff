@@ -11,8 +11,8 @@ namespace Lib.Evolution
         public int Generation { get; protected set; } = 1;
 
         public float CrossSwapProbability { get; set; } = 0.6f;
-        public float IndividualMutationProbability { get; set; } = 0.20f;
-        public float GenotypeMutationProbability { get; set; } = 0.20f;
+        public float IndividualMutationProbability { get; set; } = 0.25f;
+        public float GenotypeMutationProbability { get; set; } = 0.25f;
         public float WeakestPercentage { get; set; } = 0.3f;
         public float MaxMutationAmount { get; set; } = 0.3f;
         public float ThreeParentsProbability { get; set; } = 0.75f;
@@ -42,8 +42,8 @@ namespace Lib.Evolution
             for (int i = 0; i < PopulationSize; i++)
             {
                 var genom = new Genotype();
-                genom.SetParameters(weights);
                 genom.RandomizeParameters();
+                genom.SetParameters(weights);
                 list.Add(genom);
             }
 

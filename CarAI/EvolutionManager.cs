@@ -25,7 +25,7 @@ namespace CarAI
 
         public EvolutionManager()
         {
-            double[] weights = null;// LoadWeights(); 
+            double[] weights = null;//  LoadWeights(); 
 
             Network = new NeuralNetwork((uint)new Car(Road, new CarGenotype()).Sensors.Count, 1);
             CarGenotype.PARAMETER_COUNT = Network.WeightCount;
@@ -144,12 +144,12 @@ namespace CarAI
 
                 var checkpoint = Road.Checkpoint(car);
 
-                if (car.Genotype.Checkpoint != checkpoint)
+                if (car.Genotype.Checkpoint < checkpoint && checkpoint- car.Genotype.Checkpoint == 1)
                 {
                     car.Genotype.CheckpointsPassed++;
                     car.Genotype.Checkpoint = checkpoint;
                 }
-                
+
                 if (Road.Intersects(car))
                 {
                     _cars.Remove(car);

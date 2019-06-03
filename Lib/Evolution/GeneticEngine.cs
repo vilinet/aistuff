@@ -14,7 +14,7 @@ namespace Lib.Evolution
         public float IndividualMutationProbability { get; set; } = 0.25f;
         public float GenotypeMutationProbability { get; set; } = 0.25f;
         public float WeakestPercentage { get; set; } = 0.3f;
-        public float MaxMutationAmount { get; set; } = 0.3f;
+        public float MaxMutationAmount { get; set; } = 0.1f;
         public float ThreeParentsProbability { get; set; } = 0.75f;
 
         public int Elits { get; set; } = 10;
@@ -55,7 +55,10 @@ namespace Lib.Evolution
             var filtered = Population.OrderByDescending(x => x.GetFitness()).Take(Population.Count() - (int)(Population.Count() * WeakestPercentage)).ToList();
             var best = filtered.First();
             var newPopulation = new List<IGenotype>();
-
+            foreach (var item in filtered.Take(5))
+            {
+                newPopulation.Add(item);
+            }
             for (int i = 0; i < Elits && i < filtered.Count; i++)
             {
                 var cs = filtered.ToList().Take(filtered.Count).ToList();

@@ -20,7 +20,6 @@ namespace CarAI
 
         public Road Road { get; } = new Road();
 
-        DateTime levelStartTime;
         float lastBestFitness = 0;
 
         public EvolutionManager()
@@ -30,10 +29,10 @@ namespace CarAI
             Network = new NeuralNetwork((uint)new Car(Road, new CarGenotype()).Sensors.Count, 1);
             CarGenotype.PARAMETER_COUNT = Network.WeightCount;
 
-            Evolution = new Evolution<CarGenotype>(100, weights)
+            Evolution = new Evolution<CarGenotype>(500, weights)
             {
-                Elits = 10,
-                ElitRequirementTop = 0.15f
+                Elits = 50,
+                ElitRequirementTop = 0.10f
             };
 
             UpdateCarEntities();
@@ -87,7 +86,6 @@ namespace CarAI
                 _cars.Add(new Car(Road, (CarGenotype)item));
             }
 
-            levelStartTime = DateTime.Now;
         }
 
         public void NewGeneration()
@@ -104,8 +102,6 @@ namespace CarAI
                 }
                 File.WriteAllText("C:/temp/ki.txt", str);
             }
-
-            Debug.Print(Evolution.Generation.ToString());
 
             UpdateCarEntities();
         }
@@ -140,17 +136,25 @@ namespace CarAI
                 }
 
                 var result = Network.ProcessInputs(car.GetInputVector());
-                car.Go(GetDirection(result));
+
+                car.Go(GetDirection(result), (float)result[0]);
 
                 var checkpoint = Road.Checkpoint(car);
-
-                if (car.Genotype.Checkpoint < checkpoint && checkpoint- car.Genotype.Checkpoint == 1)
+                if (checkpoint != -1)
                 {
-                    car.Genotype.CheckpointsPassed++;
-                    car.Genotype.Checkpoint = checkpoint;
-                }
+                    if (car.Genotype.Checkpoint < checkpoint)
+                    {
+                        car.Genotype.CheckpointsPassed++;
+                        car.Genotype.Checkpoint = checkpoint;
+                    }
 
-                if (Road.Intersects(car))
+                    if (car.Genotype.Checkpoint > checkpoint && Road.GetMaxCheckpoint() != car.Genotype.Checkpoint)
+                    {
+                        car.Genotype.Checkpoint = 0;
+                        car.Genotype.CheckpointsPassed = 0;
+                    }
+                }
+                if(Road.Intersects(car))
                 {
                     _cars.Remove(car);
                 }

@@ -12,7 +12,7 @@ namespace CarAI.AutoMotive
 
         public Sprite Sprite { get; private set; }
         public float Angle { get; private set; } = 0f;
-        public float Speed { get; private set; } = 1f;
+        public float Speed { get;  set; } = 1f;
 
         public CarGenotype Genotype { get; }
 
@@ -52,10 +52,10 @@ namespace CarAI.AutoMotive
                 item.Update();
         }
 
-        public void Go(Direction dir)
+        public void Go(Direction dir, float angle)
         {
-            if (dir == Direction.Left) Angle -= 3f;
-            else if (dir == Direction.Right) Angle += 3f;
+            if (dir == Direction.Left) Angle -=2.5f;
+           else if (dir == Direction.Right) Angle += 2.5f;
 
             Sprite.Rotation = Angle;
             MoveYourBody();
@@ -67,7 +67,7 @@ namespace CarAI.AutoMotive
             var x = Math.Cos(rad);
             var y = Math.Sin(rad);
 
-            Sprite.Position += new Vector2f((float)(x * Speed), (float)(y * Speed));
+            Sprite.Position += new Vector2f((float)(x * Speed*2), (float)(y * Speed*2));
         }
 
         public void Draw(RenderWindow window)

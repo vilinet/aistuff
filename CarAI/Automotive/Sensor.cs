@@ -53,7 +53,7 @@ namespace CarAI.AutoMotive
 
         public void Draw(RenderWindow window)
         {
-           window.Draw(new Vertex[] { new Vertex(Car.Sprite.Position, Color.Yellow), new Vertex(EndPoint, Color.Yellow) }, PrimitiveType.Lines);
+          // window.Draw(new Vertex[] { new Vertex(Car.Sprite.Position, Color.Yellow), new Vertex(EndPoint, Color.Yellow) }, PrimitiveType.Lines);
         }
     }
 }

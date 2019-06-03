@@ -42,6 +42,7 @@ namespace CarAI
 
         private void Window_MouseButtonPressed(object sender, MouseButtonEventArgs e)
         {
+            Debug.WriteLine(e.X + "," + e.Y);
             pressed = true;
         }
 

@@ -4,40 +4,56 @@ using SFML.System;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace CarAI
 {
    public class Road
     {
         public Vertex[][] Rings { get; private set; }
-
+        public Vertex[] Objects { get; private set; }
         public Road()
         {
+            Rings = LoadVertexes("./assets/map");
+           
+        }
+
+        private Vertex[][] LoadVertexes(string file)
+        {
             var lines = File.ReadAllLines("./assets/map");
+            int count = lines.Count(x => x == "==");
 
-            Rings = new Vertex[2][];
-            var list = new List<Vertex>();
-
+            var rings = new Vertex[count][];
+            List<Vertex> list = new List<Vertex>(); ;
+            int ringId = 0;
             foreach (var line in lines)
             {
                 if (line == "==")
                 {
-                    Rings[0] = list.ToArray();
+                    rings[ringId++] = list.ToArray();
                     list = new List<Vertex>();
                 }
                 else
                 {
-                    var parts = line.Split(",");
-                    var vertex = new Vertex(new Vector2f(int.Parse(parts[0]), int.Parse(parts[1])), Color.Blue);
-                    if(list.Count>0)
+                    if (ringId > 1)
                     {
-                        list.Add(new Vertex((list[list.Count - 1].Position + vertex.Position) / 2, Color.Cyan));
+                        var parts = line.Split(",");
+                        var vertex = new Vertex(new Vector2f(int.Parse(parts[0]), int.Parse(parts[1])), Color.Red);
+                        list.Add(vertex);
                     }
-                    list.Add(vertex);
-
+                    else
+                    {
+                        var parts = line.Split(",");
+                        var vertex = new Vertex(new Vector2f(int.Parse(parts[0]), int.Parse(parts[1])), Color.Blue);
+                        if (list.Count > 0)
+                        {
+                            list.Add(new Vertex((list[list.Count - 1].Position + vertex.Position) / 2, Color.Cyan));
+                        }
+                        list.Add(vertex);
+                    }
                 }
             }
-            Rings[1] = list.ToArray();
+            return rings;
         }
 
         public bool Intersects(Car car)
@@ -82,7 +98,7 @@ namespace CarAI
             }
         }
 
-        public uint Checkpoint(Car car) {
+        public int Checkpoint(Car car) {
             var rect = car.Sprite.GetGlobalBounds();
 
             var leftTop = new Vector2f(rect.Left, rect.Top);
@@ -99,10 +115,15 @@ namespace CarAI
                    MathHelper.Intersects2D(a, b, rightTop, rightBottom) != default ||
                    MathHelper.Intersects2D(a, b, leftBottom, rightBottom) != default)
                 {
-                    return i+1;
+                    return ((int)i)+1;
                 }
             }
-            return 0;
+            return -1;
+        }
+
+        public int GetMaxCheckpoint()
+        {
+            return Rings[0].Length + 1;
         }
 
       

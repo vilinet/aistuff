@@ -10,12 +10,12 @@ namespace CarAI.AutoMotive
 {
     public class CarGenotype : IGenotype
     {
-        public static int PARAMETER_COUNT = 34;
+        public static int PARAMETER_COUNT = 1;
 
         public double[] Parameters { get; private set; } = new double[PARAMETER_COUNT];
 
         public int CheckpointsPassed { get;  set; }
-        public uint Checkpoint { get; internal set; }
+        public int Checkpoint { get; internal set; }
 
         public CarGenotype() {}
 

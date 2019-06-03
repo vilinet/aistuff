@@ -9,9 +9,11 @@ namespace CarAI
     class CarWindow
     {
         private RenderWindow window;
+        bool pressed = false,pause = false;
 
         public event EventHandler OnRender;
         public event EventHandler<KeyEventArgs> KeyDown;
+        
 
         private EvolutionManager manager;
 
@@ -27,7 +29,6 @@ namespace CarAI
             window.MouseMoved += Window_MouseMoved;
         }
 
-        bool pressed = false;
 
         private void Window_MouseMoved(object sender, MouseMoveEventArgs e)
         {
@@ -46,8 +47,11 @@ namespace CarAI
             pressed = true;
         }
 
+
         private void Window_KeyPressed(object sender, KeyEventArgs e)
         {
+            if (e.Code == Keyboard.Key.P)
+                pause = !pause;
             if (e.Code == Keyboard.Key.Escape)
                 window.Close();
 
@@ -69,7 +73,8 @@ namespace CarAI
         {
             while (window.IsOpen)
             {
-                manager.Update();
+                if(!pause)
+                    manager.Update();
                 window.Clear();
                 window.DispatchEvents();
                 OnRender?.Invoke(window, EventArgs.Empty);

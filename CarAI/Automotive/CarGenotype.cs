@@ -82,5 +82,10 @@ namespace CarAI.AutoMotive
                 }
             }
         }
+
+        public object GetParameters()
+        {
+            return Parameters;
+        }
     }
 }

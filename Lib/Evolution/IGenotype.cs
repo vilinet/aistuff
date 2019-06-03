@@ -14,6 +14,7 @@ namespace Lib.Evolution
 
         IGenotype Clone();
 
-        void SetParameters(object weights);
+        void SetParameters(object parameters);
+        object GetParameters();
     }
 }

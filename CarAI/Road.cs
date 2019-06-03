@@ -123,7 +123,7 @@ namespace CarAI
 
         public int GetMaxCheckpoint()
         {
-            return Rings[0].Length + 1;
+            return Rings[0].Length ;
         }
 
       

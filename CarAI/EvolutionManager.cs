@@ -25,8 +25,8 @@ namespace CarAI
         public EvolutionManager()
         {
             double[] weights = null;//  LoadWeights(); 
-
-            Network = new NeuralNetwork((uint)new Car(Road, new CarGenotype()).Sensors.Count, 1);
+            uint sensors = (uint)new Car(Road, new CarGenotype()).Sensors.Count;
+            Network = new NeuralNetwork(sensors, 1);
             CarGenotype.PARAMETER_COUNT = Network.WeightCount;
 
             Evolution = new Evolution<CarGenotype>(500, weights)
@@ -64,7 +64,7 @@ namespace CarAI
                 {
                     var p = Road.Rings[i][j];
                     var dist = Math.Sqrt(Math.Pow(p.Position.X - x, 2) + Math.Pow(p.Position.Y - y, 2));
-                    if( dist<5 && dist < minDistance)
+                    if( dist<10 && dist < minDistance)
                     {
                         minDistance = dist;
                         ringId = i;
@@ -142,21 +142,27 @@ namespace CarAI
                 var checkpoint = Road.Checkpoint(car);
                 if (checkpoint != -1)
                 {
-                    if (car.Genotype.Checkpoint < checkpoint)
+
+                    if ( car.Genotype.Checkpoint < checkpoint)
                     {
                         car.Genotype.CheckpointsPassed++;
                         car.Genotype.Checkpoint = checkpoint;
                     }
-
-                    if (car.Genotype.Checkpoint > checkpoint && Road.GetMaxCheckpoint() != car.Genotype.Checkpoint)
+                    else if(car.Genotype.Checkpoint == checkpoint && checkpoint == Road.GetMaxCheckpoint())
                     {
                         car.Genotype.Checkpoint = 0;
-                        car.Genotype.CheckpointsPassed = 0;
+                        car.Genotype.CheckpointsPassed++;
                     }
+                    else
+                    {
+                        car.Genotype.Checkpoint = checkpoint;
+                    }
+
                 }
                 if(Road.Intersects(car))
                 {
                     _cars.Remove(car);
+                    Console.WriteLine("Alive: " + _cars.Count);
                 }
             }
         }
